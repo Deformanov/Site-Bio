@@ -1,32 +1,100 @@
 <!DOCTYPE html>
-
 <html lang="ru">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <title>Deformanov | Био</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 <link href="style.css" rel="stylesheet"/>
+<style>
+.bio-text {
+  display: none;
+  margin-top: 10px;
+  font-size: 15px;
+  color: var(--text-main);
+  transition: opacity 0.3s ease;
+}
+
+.bio-toggle-btn {
+  margin-top: 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--text-main);
+  font-size: 14px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.bio-toggle-btn:hover {
+  background-color: var(--border-color);
+  transform: scale(1.05);
+}
+
+@media (max-width: 400px) {
+  .card {
+    width: 90%;
+    padding: 30px 20px;
+  }
+}
+
+/* GitHub icon adaptive styles */
+.social a.github {
+  color: #444;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+body.dark-theme .social a.github {
+  color: #c0c0c0;
+}
+.social a.github:hover {
+  transform: scale(1.2);
+  color: #000;
+}
+body.dark-theme .social a.github:hover {
+  color: #ffffff;
+}
+</style>
 </head>
 <body>
 <button class="theme-toggle" onclick="toggleTheme()">
-<i class="fas fa-moon" id="theme-icon"></i>
+  <i class="fas fa-moon" id="theme-icon"></i>
 </button>
 <div class="card">
-<img alt="Deformanov" class="avatar" src="https://imgur.com/Dy8Kw7s.png"/>
-<h1>Deformanov</h1>
-<div class="social">
-<a class="telegram" href="https://t.me/Deformanov" target="_blank">
-<i class="fab fa-telegram"></i>
-</a>
-<a class="instagram" href="https://www.instagram.com/Deformanov" target="_blank">
-<i class="fab fa-instagram"></i>
-</a>
-</div>
+  <img alt="Deformanov" class="avatar" src="https://imgur.com/Dy8Kw7s.png"/>
+  <h1>Deformanov</h1>
+  <button class="bio-toggle-btn" onclick="toggleBio()" id="bio-btn">Посмотреть био</button>
+  <p class="bio-text" id="bio">Привет! Я занимаюсь креативными проектами, веб-разработкой и люблю исследовать новые технологии.</p>
+
+  <div class="social">
+    <a class="telegram" href="https://t.me/Deformanov" target="_blank">
+      <i class="fab fa-telegram"></i>
+    </a>
+    <a class="instagram" href="https://www.instagram.com/Deformanov" target="_blank">
+      <i class="fab fa-instagram"></i>
+    </a>
+    <a class="github" href="https://github.com/Deformanov" target="_blank">
+      <i class="fab fa-github"></i>
+    </a>
+  </div>
 </div>
 <footer>
-    © 2025 Deformanov
-  </footer>
-<script src="script.js"></script>
+  © 2025 Deformanov
+</footer>
+<script>
+function toggleTheme() {
+  const body = document.body;
+  const icon = document.getElementById('theme-icon');
+  const isDark = body.classList.toggle('dark-theme');
+  icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+}
+
+function toggleBio() {
+  const bio = document.getElementById('bio');
+  const btn = document.getElementById('bio-btn');
+  const visible = bio.style.display === 'block';
+  bio.style.display = visible ? 'none' : 'block';
+  btn.textContent = visible ? 'Посмотреть био' : 'Скрыть био';
+}
+</script>
 </body>
 </html>
