@@ -7,14 +7,51 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 <link href="style.css" rel="stylesheet"/>
 <style>
-.bio-text {
+.bio-wrapper {
+  overflow: hidden;
+  transition: max-height 0.6s ease, opacity 0.5s ease;
+  max-height: 0;
+  opacity: 0;
+  margin-top: 15px;
   display: none;
-  margin-top: 10px;
+}
+.bio-wrapper.open {
+  display: block;
+  max-height: 600px;
+  opacity: 1;
+}
+.bio-line {
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(to right, #1da1f2, #dc2743);
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+  margin-bottom: 10px;
+}
+.bio-wrapper.open .bio-line {
+  transition-delay: 0.4s;
+  transform: scaleX(1);
+}
+.bio-container {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background-color: var(--card-bg);
+  padding: 15px 10px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.bio-wrapper.open .bio-container {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.4s;
+}
+.bio-text {
   font-size: 15px;
   color: var(--text-main);
-  transition: opacity 0.3s ease;
 }
-
 .bio-toggle-btn {
   margin-top: 10px;
   background: var(--card-bg);
@@ -30,15 +67,17 @@
   background-color: var(--border-color);
   transform: scale(1.05);
 }
-
-@media (max-width: 400px) {
-  .card {
-    width: 90%;
-    padding: 30px 20px;
-  }
+.bio-toggle-btn::after {
+  content: "\f078";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  margin-left: 8px;
+  transition: transform 0.3s ease;
+  display: inline-block;
 }
-
-/* GitHub icon adaptive styles */
+.bio-toggle-btn.expanded::after {
+  transform: rotate(180deg);
+}
 .social a.github {
   color: #444;
   transition: color 0.3s ease, transform 0.3s ease;
@@ -60,24 +99,22 @@ body.dark-theme .social a.github:hover {
   <i class="fas fa-moon" id="theme-icon"></i>
 </button>
 <div class="card">
-  <img alt="Deformanov" class="avatar" src="https://imgur.com/Dy8Kw7s.png"/>
+  <img alt="Deformanov" class="avatar" src="https://imgur.com/MZXhQ6J.png"/>
   <h1>Deformanov</h1>
-  <button class="bio-toggle-btn" onclick="toggleBio()" id="bio-btn">Посмотреть био</button>
-  <p class="bio-text" id="bio">Привет! Я занимаюсь креативными проектами, веб-разработкой и люблю исследовать новые технологии.</p>
-
+  <button class="bio-toggle-btn" onclick="toggleBio()" id="bio-btn">Показать био</button>
+  <div class="bio-wrapper" id="bio-wrapper">
+    <div class="bio-line"></div>
+    <div class="bio-container">
+      <p class="bio-text">Привет! Я занимаюсь креативными проектами, веб-разработкой и люблю исследовать новые технологии.</p>
+    </div>
+  </div>
   <div class="social">
-    <a class="telegram" href="https://t.me/Deformanov" target="_blank">
-      <i class="fab fa-telegram"></i>
-    </a>
-    <a class="instagram" href="https://www.instagram.com/Deformanov" target="_blank">
-      <i class="fab fa-instagram"></i>
-    </a>
-    <a class="github" href="https://github.com/Deformanov" target="_blank">
-      <i class="fab fa-github"></i>
-    </a>
+    <a class="telegram" href="https://t.me/Deformanov" target="_blank"><i class="fab fa-telegram"></i></a>
+    <a class="instagram" href="https://www.instagram.com/Deformanov" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a class="github" href="https://github.com/Deformanov" target="_blank"><i class="fab fa-github"></i></a>
   </div>
 </div>
-<footer>
+<footer style="margin-top: 30px;">
   © 2025 Deformanov
 </footer>
 <script>
@@ -89,11 +126,41 @@ function toggleTheme() {
 }
 
 function toggleBio() {
-  const bio = document.getElementById('bio');
+  const wrapper = document.getElementById('bio-wrapper');
   const btn = document.getElementById('bio-btn');
-  const visible = bio.style.display === 'block';
-  bio.style.display = visible ? 'none' : 'block';
-  btn.textContent = visible ? 'Посмотреть био' : 'Скрыть био';
+  const isOpen = wrapper.classList.contains('open');
+
+  if (!isOpen) {
+    wrapper.style.display = 'block';
+    setTimeout(() => wrapper.classList.add('open'), 10);
+  } else {
+    wrapper.classList.remove('open');
+    setTimeout(() => wrapper.style.display = 'none', 600);
+  }
+
+  btn.textContent = isOpen ? 'Показать био' : 'Скрыть био';
+  btn.classList.toggle('expanded', !isOpen);
+}
+
+function toggleBio() {
+  const wrapper = document.getElementById('bio-wrapper');
+  const btn = document.getElementById('bio-btn');
+  const isOpen = wrapper.classList.contains('open');
+
+  if (!isOpen) {
+    wrapper.classList.remove('closing');
+    wrapper.classList.add('open');
+    btn.textContent = 'Скрыть био';
+    btn.classList.add('expanded');
+  } else {
+    wrapper.classList.add('closing');
+    wrapper.classList.remove('open');
+    btn.textContent = 'Показать био';
+    btn.classList.remove('expanded');
+    setTimeout(() => {
+      wrapper.classList.remove('closing');
+    }, 800);
+  }
 }
 </script>
 </body>
